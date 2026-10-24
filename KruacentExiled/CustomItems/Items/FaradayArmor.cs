@@ -6,13 +6,15 @@ using Exiled.API.Features.Spawn;
 using Exiled.Events.EventArgs.Player;
 using KruacentExiled.CustomItems.API.Features;
 using KruacentExiled.CustomItems.API.Interface;
+using KruacentExiled.CustomRoles.API.Interfaces;
 using MEC;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace KruacentExiled.CustomItems.Items
 {
 
-    public class FaradayArmor : KECustomWeapon, IViolentItem
+    public class FaradayArmor : KECustomWeapon, IViolentItem, ILumosItem
     {
 
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
@@ -22,19 +24,20 @@ namespace KruacentExiled.CustomItems.Items
                 ["en"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Faraday Armor",
-                    [TranslationKeyDesc] = "You're protected from electricty !",
+                    [TranslationKeyDesc] = "Tesla doesn't affect you ! And Electrical Damage is reduced 2 times !",
                 },
                 ["fr"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Armure de Faraday",
-                    [TranslationKeyDesc] = "T'es protégé de l'électricité !",
+                    [TranslationKeyDesc] = "T'es protégé des Teslas et tu prends 2 fois moins de dégats d'électricité !",
                 },
             };
         }
         
         public override ItemType ItemType => ItemType.ArmorHeavy;
         public override string Name { get; set; } = "Faraday Armor";
-        public override float Weight { get; set; } = 1f;
+        public override float Weight { get; set; } = 0.5f;
+        public Color Color { get; set; } = UnityEngine.Color.green;
         public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
         {
             Limit = 1,
