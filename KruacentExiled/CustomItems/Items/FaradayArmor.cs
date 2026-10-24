@@ -14,7 +14,7 @@ using UnityEngine;
 namespace KruacentExiled.CustomItems.Items
 {
 
-    public class FaradayArmor : KECustomWeapon, IViolentItem, ILumosItem
+    public class FaradayArmor : KECustomItem, IViolentItem, ILumosItem
     {
 
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()

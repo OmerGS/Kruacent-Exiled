@@ -9,7 +9,7 @@ using UnityEngine;
 namespace KruacentExiled.CustomItems.Items
 {
 
-    public class ExplosiveProofArmor : KECustomWeapon, IViolentItem, ILumosItem
+    public class ExplosiveProofArmor : KECustomItem, IViolentItem, ILumosItem
     {
 
         protected override Dictionary<string, Dictionary<string, string>> SetTranslation()
