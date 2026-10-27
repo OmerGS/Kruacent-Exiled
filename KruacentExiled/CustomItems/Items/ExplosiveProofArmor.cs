@@ -19,12 +19,12 @@ namespace KruacentExiled.CustomItems.Items
                 ["en"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Explosive Proof Armor",
-                    [TranslationKeyDesc] = "Explosion damage is reduced by 8 times ! Yippee !",
+                    [TranslationKeyDesc] = "Explosion damage is reduced by 4 times ! Yippee !",
                 },
                 ["fr"] = new Dictionary<string, string>()
                 {
                     [TranslationKeyName] = "Armure Anti Explosion",
-                    [TranslationKeyDesc] = "Tu prends 8 fois moins de dégats lors d'explosion !",
+                    [TranslationKeyDesc] = "Tu prends 4 fois moins de dégats lors d'explosion !",
                 },
             };
         }
@@ -32,7 +32,7 @@ namespace KruacentExiled.CustomItems.Items
         public override ItemType ItemType => ItemType.ArmorLight;
         public Color Color { get; set; } = UnityEngine.Color.red;
         public override string Name { get; set; } = "ExplosiveProofArmor";
-        public override float Weight { get; set; } = 0.5f;
+        public override float Weight { get; set; } = 2f;
         public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
         {
             Limit = 1,
@@ -50,10 +50,7 @@ namespace KruacentExiled.CustomItems.Items
 
         public bool IsViolent => true;
 
-        // when player has 100 HP -> remain 70 HP by a HE Grenade
-        // when player has 70 HP -> remain 33 HP by a HE Grenade
-        // when player has 40 HP -> remain 3 HP by a HE Grenade
-        private int DamageReductionByExplosion = 8;
+        private int DamageReductionByExplosion = 3;
 
         protected override void SubscribeEvents()
         {

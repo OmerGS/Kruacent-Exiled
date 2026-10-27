@@ -36,7 +36,7 @@ namespace KruacentExiled.CustomItems.Items
         
         public override ItemType ItemType => ItemType.ArmorHeavy;
         public override string Name { get; set; } = "Faraday Armor";
-        public override float Weight { get; set; } = 0.5f;
+        public override float Weight { get; set; } = 4f;
         public Color Color { get; set; } = UnityEngine.Color.green;
         public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
         {
@@ -45,7 +45,7 @@ namespace KruacentExiled.CustomItems.Items
             {
                 new RoomSpawnPoint()
                 {
-                    Room = Exiled.API.Enums.RoomType.HczHid,
+                    Room = Exiled.API.Enums.RoomType.Hcz079,
                     Offset = new UnityEngine.Vector3(1f, 0f, 1f),
                     Chance = 70
                 }
