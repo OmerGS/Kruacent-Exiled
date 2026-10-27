@@ -44,6 +44,7 @@ namespace KruacentExiled.CustomRoles.CR.Human
         public override bool KeepRoleOnDeath { get; set; } = false;
         public override bool KeepRoleOnChangingRole { get; set; } = false;
         public override float SpawnChance { get; set; } = 100;
+        public override bool KeepInventoryOnSpawn { get; set; } = true;
 
         public override HashSet<RoleTypeId> Roles => new HashSet<RoleTypeId>() { RoleTypeId.Scientist, RoleTypeId.ClassD };
 
