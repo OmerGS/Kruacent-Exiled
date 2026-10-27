@@ -62,7 +62,7 @@ internal class HappyBirthday : ICoinEffect
                 happyBirthdayMusicFile = MainPlugin.Configs.DefaultBirthdayMusic;
             }
 
-            if (KruacentExiled.Misc.Utils.RandomNumberGenerator.RollChance(0, player, true))
+            if (KruacentExiled.Misc.Utils.RandomNumberGenerator.RollChance(5, player, true))
             {
                 happyBirthdayMusicFile = "birthday_surprise";
             }
