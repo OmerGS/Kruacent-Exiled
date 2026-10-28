@@ -54,7 +54,7 @@ namespace KruacentExiled.CustomRoles.CR.MTF.Medic
 
         public override Dictionary<AmmoType, ushort> Ammo { get; set; } = new Dictionary<AmmoType, ushort>()
         {
-          { AmmoType.Nato9, 80},
+          { AmmoType.Nato9, 70},
         };
 
         protected override void GiveInventory(Player player)

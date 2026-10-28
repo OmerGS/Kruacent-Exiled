@@ -35,13 +35,10 @@ namespace KruacentExiled.CustomRoles.CR.MTF.Medic
         public void StartHealingZone(float duration = 20f)
         {
             IsActive = true;
-            _zonePrimitive = Primitive.Create(PrimitiveType.Cylinder, _player.Position, null, new Vector3(ZoneRadius * 2, 0.05f, ZoneRadius * 2), true);
-
-            if (_zonePrimitive != null)
-            {
-                _zonePrimitive.Collidable = false;
-                _zonePrimitive.Visible = false;
-            }
+            _zonePrimitive = Primitive.Create(PrimitiveType.Cylinder, _player.Position, null, new Vector3(ZoneRadius * 2, 0.05f, ZoneRadius * 2), false);
+            _zonePrimitive.Visible = false;
+            _zonePrimitive.Collidable = false;
+            _zonePrimitive.Spawn();
 
             _healCoroutine = Timing.RunCoroutine(HealZoneRoutine(duration));
         }

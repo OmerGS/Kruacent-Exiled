@@ -31,7 +31,7 @@ namespace KruacentExiled.CustomRoles.Abilities
         public override float Cooldown { get; } = 90f;
         public override Color ColorOn => Color.green;
 
-        public override Color ColorOff => Color.red;
+        public override Color ColorOff => Color.white;
 
         protected override bool AbilityUsed(Player player)
         {
