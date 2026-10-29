@@ -12,10 +12,14 @@ using InventorySystem.Items;
 using InventorySystem.Items.Firearms.Attachments;
 using KE.Utils.API.Displays.DisplayMeow;
 using KE.Utils.API.Displays.DisplayMeow.Placements;
+using KE.Utils.API.Features;
 using KE.Utils.API.Translations;
+using KruacentExiled.CustomItems.API.Features;
+using KruacentExiled.CustomItems.API.Interface;
 using KruacentExiled.CustomRoles.API.HintPositions;
 using KruacentExiled.CustomRoles.API.Interfaces;
 using KruacentExiled.CustomRoles.Events.EventArgs;
+using KruacentExiled.Extensions;
 using KruacentExiled.Misc.Events.EventsArgs;
 using KruacentExiled.Misc.Utils;
 using MEC;
@@ -262,6 +266,12 @@ namespace KruacentExiled.CustomRoles.API.Features
             {
                 RandomNumberGenerator.OnRollingChance += HandleRollingChance;
             }
+
+            if (this is INoPickupItem)
+            {
+                Exiled.Events.Handlers.Player.SearchingPickup += OnSearchingUpPickup;
+                Exiled.Events.Handlers.Player.ItemAdded += OnItemAdded;
+            }
         }
 
 
@@ -279,6 +289,12 @@ namespace KruacentExiled.CustomRoles.API.Features
             if (this is ILucky)
             {
                 RandomNumberGenerator.OnRollingChance -= HandleRollingChance;
+            }
+
+            if (this is INoPickupItem)
+            {
+                Exiled.Events.Handlers.Player.SearchingPickup -= OnSearchingUpPickup;
+                Exiled.Events.Handlers.Player.ItemAdded -= OnItemAdded;
             }
         }
 
@@ -345,6 +361,74 @@ namespace KruacentExiled.CustomRoles.API.Features
                     ev.ForcedResult = !ev.IsBeneficial;
                     break;
             }
+        }
+
+        private void OnSearchingUpPickup(SearchingPickupEventArgs ev)
+        {
+            KELog.Debug($"The item {ev.Pickup.GetName()} is picked up");
+
+            NoPickupItemLogic(ev.Player, ev.Pickup.GetName(), () => ev.IsAllowed = false);
+        }
+
+        private void OnItemAdded(ItemAddedEventArgs ev)
+        {
+            Timing.CallDelayed(0.1f, () => {
+                KELog.Debug($"The item {ev.Item.GetName()} is added to the inventory");
+
+                NoPickupItemLogic(ev.Player, ev.Item.GetName(), () =>
+                {
+                    KELog.Debug(ev.Item.GetName());
+                    Timing.CallDelayed(0.1f, () =>
+                    {
+                        ev.Player.DropItem(ev.Item);
+                    });
+                });
+            });
+        }
+
+        private void NoPickupItemLogic(Player player, string itemTypeName, Action onItemBanned)
+        {
+            if (!Check(player)) return;
+
+            INoPickupItem noPickupRole = this as INoPickupItem;
+            if (noPickupRole.BannedItem is null || noPickupRole.BannedItem.Count == 0) return;
+
+            if (IsItemBanned(noPickupRole, itemTypeName))
+            {
+                onItemBanned.Invoke();
+
+                string message = GetTranslation(player, noPickupRole.NoPickupTranslationKey);
+
+                if (!string.IsNullOrEmpty(message))
+                {
+                    ShowEffectHint(player, message);
+                }
+            }
+        }
+
+        private bool IsItemBanned(INoPickupItem role, string itemTypeName)
+        {
+            if (role == null || string.IsNullOrEmpty(itemTypeName)) return false;
+
+            if (role.WhitelistItem != null && role.WhitelistItem.Contains(itemTypeName))
+                return false;
+
+            if (role.BannedItem != null && role.BannedItem.Contains(itemTypeName))
+                return true;
+
+            if (role.BlockScpItems)
+            {
+                if (Enum.TryParse<ItemType>(itemTypeName, out ItemType type) && type.IsScp())
+                    return true;
+            }
+
+            if (role.BlockRevivingItems)
+            {
+                if (CustomItem.TryGet(itemTypeName, out CustomItem customItem) && customItem is KECustomItem keItem && keItem is IRevivingCustomItem)
+                    return true;
+            }
+
+            return false;
         }
 
 

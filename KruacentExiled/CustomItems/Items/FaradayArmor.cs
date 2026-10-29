@@ -35,7 +35,7 @@ namespace KruacentExiled.CustomItems.Items
         }
         
         public override ItemType ItemType => ItemType.ArmorHeavy;
-        public override string Name { get; set; } = "Faraday Armor";
+        public override string Name { get; set; } = "FaradayArmor";
         public override float Weight { get; set; } = 4f;
         public Color Color { get; set; } = UnityEngine.Color.green;
         public override SpawnProperties SpawnProperties { get; set; } = new SpawnProperties()
