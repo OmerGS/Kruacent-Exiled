@@ -79,6 +79,8 @@ namespace KruacentExiled.CustomRoles.CR.CustomSCPs
             $"{ItemType.GunFRMG0}",
             $"{ItemType.GunAK}",
             $"{ItemType.GunShotgun}",
+            $"{ItemType.GunSCP127}",
+            $"{ItemType.GunE11SR}",
 
             "ExplosiveProofArmor",
             "FaradayArmor",
@@ -99,7 +101,7 @@ namespace KruacentExiled.CustomRoles.CR.CustomSCPs
 
         public bool BlockScpItems { get; set; } = true;
         public bool BlockRevivingItems { get; set; } = true;
-        public bool BlockViolentItem { get; set; } = false;
+        public bool BlockViolentItems { get; set; } = false;
 
         public HashSet<ItemType> BlacklistedUsing = new HashSet<ItemType>()
         {

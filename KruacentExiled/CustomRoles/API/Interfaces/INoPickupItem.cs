@@ -42,5 +42,13 @@ namespace KruacentExiled.CustomRoles.API.Interfaces
         /// <c>true</c> to block reviving items except those present in <see cref="WhitelistItem"/>; otherwise, <c>false</c>.
         /// </value>
         public bool BlockRevivingItems { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the role is prohibited from picking up violent items.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> to block violent items except those present in <see cref="WhitelistItem"/>; otherwise, <c>false</c>.
+        /// </value>
+        public bool BlockViolentItems { get; set; }
     }
 }

@@ -2,6 +2,7 @@
 using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.API.Features.Items;
+using Exiled.API.Features.Pickups;
 using Exiled.API.Features.Pools;
 using Exiled.CustomItems.API.Features;
 using Exiled.CustomRoles.API.Features;
@@ -19,6 +20,7 @@ using KruacentExiled.CustomItems.API.Interface;
 using KruacentExiled.CustomRoles.API.HintPositions;
 using KruacentExiled.CustomRoles.API.Interfaces;
 using KruacentExiled.CustomRoles.Events.EventArgs;
+using KruacentExiled.CustomRoles.Extensions;
 using KruacentExiled.Extensions;
 using KruacentExiled.Misc.Events.EventsArgs;
 using KruacentExiled.Misc.Utils;
@@ -367,7 +369,7 @@ namespace KruacentExiled.CustomRoles.API.Features
         {
             KELog.Debug($"The item {ev.Pickup.GetName()} is picked up");
 
-            NoPickupItemLogic(ev.Player, ev.Pickup.GetName(), () => ev.IsAllowed = false);
+            NoPickupItemLogic(ev.Player, ev.Pickup, () => ev.IsAllowed = false);
         }
 
         private void OnItemAdded(ItemAddedEventArgs ev)
@@ -375,7 +377,7 @@ namespace KruacentExiled.CustomRoles.API.Features
             Timing.CallDelayed(0.1f, () => {
                 KELog.Debug($"The item {ev.Item.GetName()} is added to the inventory");
 
-                NoPickupItemLogic(ev.Player, ev.Item.GetName(), () =>
+                NoPickupItemLogic(ev.Player, ev.Item, () =>
                 {
                     KELog.Debug(ev.Item.GetName());
                     Timing.CallDelayed(0.1f, () =>
@@ -386,51 +388,42 @@ namespace KruacentExiled.CustomRoles.API.Features
             });
         }
 
-        private void NoPickupItemLogic(Player player, string itemTypeName, Action onItemBanned)
+        private void NoPickupItemLogic(Player player, Pickup pickup, Action onItemBanned)
         {
             if (!Check(player)) return;
 
             INoPickupItem noPickupRole = this as INoPickupItem;
-            if (noPickupRole.BannedItem is null || noPickupRole.BannedItem.Count == 0) return;
 
-            if (IsItemBanned(noPickupRole, itemTypeName))
+            if (noPickupRole.IsItemBanned(pickup))
             {
-                onItemBanned.Invoke();
-
-                string message = GetTranslation(player, noPickupRole.NoPickupTranslationKey);
-
-                if (!string.IsNullOrEmpty(message))
-                {
-                    ShowEffectHint(player, message);
-                }
+                OnCantPickup(player, noPickupRole, onItemBanned);
             }
         }
 
-        private bool IsItemBanned(INoPickupItem role, string itemTypeName)
+        private void NoPickupItemLogic(Player player, Item item, Action onItemBanned)
         {
-            if (role == null || string.IsNullOrEmpty(itemTypeName)) return false;
+            if (!Check(player)) return;
 
-            if (role.WhitelistItem != null && role.WhitelistItem.Contains(itemTypeName))
-                return false;
+            INoPickupItem noPickupRole = this as INoPickupItem;
 
-            if (role.BannedItem != null && role.BannedItem.Contains(itemTypeName))
-                return true;
-
-            if (role.BlockScpItems)
+            if (noPickupRole.IsItemBanned(item))
             {
-                if (Enum.TryParse<ItemType>(itemTypeName, out ItemType type) && type.IsScp())
-                    return true;
+                OnCantPickup(player, noPickupRole, onItemBanned);
             }
-
-            if (role.BlockRevivingItems)
-            {
-                if (CustomItem.TryGet(itemTypeName, out CustomItem customItem) && customItem is KECustomItem keItem && keItem is IRevivingCustomItem)
-                    return true;
-            }
-
-            return false;
         }
+        protected virtual void OnCantPickup(Player player, INoPickupItem noPickupRole, Action onItemBanned)
+        {
+            onItemBanned.Invoke();
 
+            if (string.IsNullOrEmpty(noPickupRole.NoPickupTranslationKey)) return;
+
+            string message = GetTranslation(player, noPickupRole.NoPickupTranslationKey);
+
+            if (!string.IsNullOrEmpty(message))
+            {
+                ShowEffectHint(player, message);
+            }
+        }
 
         public static void SpawnStartRound(Misc.Features.Spawn.SpawnedEventArgs ev)
         {
