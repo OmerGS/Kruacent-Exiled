@@ -141,8 +141,6 @@ namespace KruacentExiled.CustomRoles.Abilities
 
             player.EnableEffect(EffectType.Invisible, Duration);
             player.EnableEffect(EffectType.Ensnared, Duration);
-            player.EnableEffect(EffectType.AmnesiaItems, Duration);
-            player.EnableEffect(EffectType.AmnesiaVision, Duration);
 
             TargetCountHider.Hide(player);
         }
@@ -193,6 +191,7 @@ namespace KruacentExiled.CustomRoles.Abilities
                 }
 
                 player.AddItem(pickup, ItemAddReason.PickedUp);
+                pickup.Destroy();
             }
         }
 
